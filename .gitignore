@@ -1,0 +1,52 @@
+## .NET / Visual Studio
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio working folder
+.vs/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.csproj.user
+*.vcxproj.user
+*.vcxproj.filters
+*.vcxproj.user
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# NuGet
+*.nupkg
+# Uncomment if you want to ignore downloaded packages folder (only if you use packages/)
+# packages/
+
+# Test results
+TestResults/
+
+# Publish output
+publish/
+
+# EF / tooling artifacts
+**/Migrations/*.csproj
+
+# Secrets (optional)
+# Si tus appsettings contienen credenciales, considera NO commitearlos.
+# En ese caso, descomenta estas líneas y agrega un ejemplo seguro como appsettings.Example.json
+# appsettings*.json
+# !appsettings.Example.json
