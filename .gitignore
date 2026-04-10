@@ -45,8 +45,7 @@ publish/
 # EF / tooling artifacts
 **/Migrations/*.csproj
 
-# Secrets (optional)
-# Si tus appsettings contienen credenciales, considera NO commitearlos.
-# En ese caso, descomenta estas líneas y agrega un ejemplo seguro como appsettings.Example.json
-# appsettings*.json
-# !appsettings.Example.json
+# Secrets - appsettings contienen credenciales reales
+appsettings.json
+appsettings.Development.json
+!appsettings.Example.json

@@ -8,37 +8,28 @@ var builder = WebApplication.CreateBuilder(args);
 // EF Core con SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
+        builder.Configuration.GetConnectionString("DatabaseConecctionSGP")
     )
 );
-// Mapea la sección "Alerts" del appsettings a la clase AlertSettings
+
+
+// Mapea la secciÃ³n "Alerts" del appsettings a la clase AlertSettings
 builder.Services.Configure<AlertSettings>(
     builder.Configuration.GetSection("Alerts")
 );
 
-// HttpClient con timeout de 15 segundos por request
-builder.Services.AddHttpClient("monitor", client =>
-{
-    client.Timeout = TimeSpan.FromSeconds(15);
-});
-builder.Services.AddHttpClient(); 
+builder.Services.AddHttpClient();
 
-
-
-// Servicios propios
-// Singleton = una sola instancia durante toda la vida de la app
-// Scoped    = una instancia por request HTTP
-builder.Services.AddSingleton<ApiCheckerService>();
-builder.Services.AddScoped<AlertService>();
-
-// El BackgroundService — arranca automáticamente con la aplicación
-builder.Services.AddHostedService<MonitorBackgroundService>();
+builder.Services.AddSingleton<AlertService>();
+builder.Services.AddScoped<ApiLogService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+
 
 if (app.Environment.IsDevelopment())
 {

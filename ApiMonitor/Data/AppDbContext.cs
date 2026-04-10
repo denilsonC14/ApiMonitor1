@@ -1,50 +1,30 @@
-﻿using ApiMonitor.Models;
+using ApiMonitor.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiMonitor.Data;
 
 public class AppDbContext : DbContext
 {
-    // Constructor — recibe la configuración de conexión desde Program.cs
-    // No lo escribes tú, .NET lo inyecta automáticamente
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options) { }
 
-    // DbSet = cada uno representa una tabla en SQL Server
-    // Así accedes: _context.ProviderApis.ToList()
-    public DbSet<ProviderApi> ProviderApis => Set<ProviderApi>();
-    public DbSet<ApiMonitorLog> ApiMonitorLogs => Set<ApiMonitorLog>();
+    public DbSet<ApiLog> ApiLogs => Set<ApiLog>();
 
-    // OnModelCreating = aquí configuras reglas extra de las tablas
-    // Es opcional pero muy útil para índices y restricciones
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ProviderApi>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Name)
-                  .IsRequired()
-                  .HasMaxLength(200);
-            entity.Property(e => e.Url)
-                  .IsRequired()
-                  .HasMaxLength(500);
-        });
-
-        modelBuilder.Entity<ApiMonitorLog>(entity =>
+        modelBuilder.Entity<ApiLog>(entity =>
         {
             entity.HasKey(e => e.Id);
 
-            // Índices para búsquedas rápidas
-            // Sin índice, buscar en 100k logs sería muy lento
-            entity.HasIndex(e => e.CheckedAt);
-            entity.HasIndex(e => e.ProviderApiId);
+            entity.Property(e => e.Method).IsRequired().HasMaxLength(10);
+            entity.Property(e => e.Path).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.ProviderName).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Host).IsRequired().HasMaxLength(300);
+            entity.Property(e => e.OriginHost).IsRequired().HasMaxLength(300);
 
-            // Relación: 1 ProviderApi → muchos ApiMonitorLogs
-            // Cascade = si borras el proveedor, se borran sus logs
-            entity.HasOne(e => e.ProviderApi)
-                  .WithMany(p => p.Logs)
-                  .HasForeignKey(e => e.ProviderApiId)
-                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasIndex(e => e.ReceivedAt);
+            entity.HasIndex(e => e.ProviderName);
+            entity.HasIndex(e => e.StatusCode);
         });
     }
 }
